@@ -31,18 +31,6 @@ namespace API
             config = cnf;
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok("Listo");
-        }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]    
-        [HttpGet("p")]
-        public IActionResult GetP()
-        {
-            return Ok("Listo protegido");
-        }
-
         [HttpPost("login")]
         public IActionResult Login(string user, string pass)
         {
@@ -50,11 +38,11 @@ namespace API
                             .FirstOrDefault(u => u.NombreUsuario == user && u.Contrasenia == GenerateHash(pass));
             if(usuario is null)
                 return BadRequest("Credenciales incorrectas");
+                
             var claims = new[]
             {
                 new Claim("IdAcount", usuario.Id.ToString()),
-                new Claim("UserName2", usuario.NombreUsuario),
-                new Claim("UserName1", usuario.NombreUsuario),
+                new Claim("UserName", usuario.NombreUsuario),
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetValue<string>("Apikey")));
             var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

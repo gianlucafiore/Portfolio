@@ -26,13 +26,12 @@ namespace API
             services.AddDbContext<Db>(options =>
                 options.UseMySql(Configuration.GetConnectionString("Db"))
             );
-            // services.AddSession(options =>
-            // {
-            //     // Set a short timeout for easy testing.
-            //     options.IdleTimeout = TimeSpan.FromMinutes(20);
-            //     options.Cookie.IsEssential = true;
-            //     options.Cookie.HttpOnly = true;
-            // });
+            services.AddCors(o => o.AddPolicy("cors", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => 
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -64,7 +63,7 @@ namespace API
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseCors("cors");  
             app.UseHttpsRedirection();
             app.UseMvc();
         }
