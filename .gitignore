@@ -1,0 +1,15 @@
+
+*.dll
+
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+*.log
+*.sql
+
+.vscode/
